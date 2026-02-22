@@ -1,0 +1,33 @@
+[gd_scene format=3 uid="uid://c8ih8iknra2xb"]
+
+[ext_resource type="PackedScene" uid="uid://ctx05nffktyxm" path="res://scenes/playgrounds/player_playground.tscn" id="1_o5qli"]
+[ext_resource type="PackedScene" uid="uid://dhcouddbwgg2e" path="res://scenes/drone/drone.tscn" id="2_0wfyh"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_o5qli"]
+sky_top_color = Color(0.23905468, 0.4654696, 0.6731308, 1)
+sky_horizon_color = Color(0.62830925, 0.70241, 0.75766, 1)
+ground_bottom_color = Color(0.14916903, 0.21915719, 0.23249596, 1)
+ground_horizon_color = Color(0.62830925, 0.70241, 0.75766, 1)
+
+[sub_resource type="Sky" id="Sky_0wfyh"]
+sky_material = SubResource("ProceduralSkyMaterial_o5qli")
+
+[sub_resource type="Environment" id="Environment_sugp2"]
+background_mode = 2
+sky = SubResource("Sky_0wfyh")
+tonemap_mode = 2
+glow_enabled = true
+
+[node name="Main" type="Node3D" unique_id=451462477]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=969663321]
+environment = SubResource("Environment_sugp2")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=589914475]
+transform = Transform3D(-0.8660254, -0.43301278, 0.25, 0, 0.49999997, 0.86602545, -0.50000006, 0.75, -0.43301266, 0, 0, 0)
+shadow_enabled = true
+
+[node name="PlayerPlayground" parent="." unique_id=1568359032 instance=ExtResource("1_o5qli")]
+
+[node name="Drone" parent="." unique_id=273523223 instance=ExtResource("2_0wfyh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -22.68755, 5.648697, -44.019447)
