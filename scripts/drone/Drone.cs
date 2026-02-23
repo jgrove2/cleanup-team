@@ -12,7 +12,7 @@ public partial class Drone : CharacterBody3D
 	[Export]
 	public float CrouchScale { get; set; } = 0.6f;
 	[Export]
-	public float VaultSpeed { get; set; } = 4.0f;
+	public float VaultSpeed { get; set; } = 2.0f;
     private float standingShapeHeight;
 	private float standingShapePositionY;
 	private CapsuleShape3D standingShapeCache;
@@ -58,7 +58,7 @@ public partial class Drone : CharacterBody3D
 		var capsule = (CapsuleShape3D)CollisionShape.Shape;
 		capsule.Height = standingShapeHeight * CrouchScale;
 		CollisionShape.Position = new Vector3(CollisionShape.Position.X, standingShapePositionY * CrouchScale, CollisionShape.Position.Z);
-		Movement.Speed = WalkSpeed;
+		Movement.Speed = WalkSpeed * 0.5f;
 		CameraControl.SetHeightScale(CrouchScale);
 	}
 
