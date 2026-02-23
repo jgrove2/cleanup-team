@@ -4,6 +4,8 @@ public class CameraComponent
 {
     private readonly CharacterBody3D body;
     private readonly Camera3D camera;
+    private readonly float standingPositionY;
+    private Tween heightTween;
 
     public float Sensitivity { get; set; } = 0.003f;
 
@@ -20,6 +22,14 @@ public class CameraComponent
     {
         this.body = body;
         this.camera = camera;
+        standingPositionY = camera.Position.Y;
+    }
+
+    public void SetHeightScale(float scale, float duration = 0.15f)
+    {
+        heightTween?.Kill();
+        heightTween = body.CreateTween();
+        heightTween.TweenProperty(camera, "position:y", standingPositionY * scale, duration);
     }
 
     /// <summary>
@@ -30,15 +40,9 @@ public class CameraComponent
     {
         if (inputEvent is InputEventMouseButton { Pressed: true })
             Input.MouseMode = Input.MouseModeEnum.Captured;
-
         if (inputEvent.IsActionPressed("ui_cancel"))
             Input.MouseMode = Input.MouseModeEnum.Visible;
-
-        if (IsLocked || Input.MouseMode != Input.MouseModeEnum.Captured)
-            return;
-
-        if (inputEvent is not InputEventMouseMotion mouseMotion)
-            return;
+        if (IsLocked || Input.MouseMode != Input.MouseModeEnum.Captured || inputEvent is not InputEventMouseMotion mouseMotion) return;
 
         // Yaw: rotate the whole body so "forward" follows horizontal mouse movement.
         // MovementComponent reads Transform.Basis so this automatically affects movement.

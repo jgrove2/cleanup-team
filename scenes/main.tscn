@@ -31,3 +31,4 @@ shadow_enabled = true
 
 [node name="Drone" parent="." unique_id=273523223 instance=ExtResource("2_0wfyh")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -22.68755, 5.648697, -44.019447)
+VaultSpeed = 1.0

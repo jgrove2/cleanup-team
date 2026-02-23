@@ -17,5 +17,7 @@ public class DroneStateMachine : StateMachineBase<Drone>
     }
 
     protected static bool WantsJump() => Input.IsActionJustPressed("ui_accept");
+
+    protected static bool WantsCrouch() => Input.IsActionPressed("crouch");
 }
 

@@ -1,23 +1,25 @@
 using Godot;
 
-public partial class JumpDroneState : DroneStateMachine
+public partial class SneakDroneState : DroneStateMachine
 {
-    public override void Enter(Drone drone)
-    {
-        Vector3 velocity = drone.Velocity;
-        velocity.Y = drone.JumpVelocity;
-        drone.Velocity = velocity;
-    }
+    public override void Enter(Drone drone) => drone.Crouch();
+
+    public override void Exit(Drone drone) => drone.Stand();
 
     public override void PreUpdate(Drone drone)
     {
         base.PreUpdate(drone);
 
-        // Hand off to fall once the drone starts descending.
-        // FallDroneState already handles gravity, MoveAndSlide, and landing.
-        if (drone.Velocity.Y < 0f)
+        if (!drone.IsOnFloor())
         {
             drone.stateManager.TransitionToState<FallDroneState>();
+            return;
+        }
+
+        if (!WantsCrouch() && drone.CanStand())
+        {
+            drone.stateManager.TransitionToState<IdleDroneState>();
+            return;
         }
         if (WantsJump())
         {
@@ -34,8 +36,6 @@ public partial class JumpDroneState : DroneStateMachine
 
     public override void Update(Drone drone, double delta)
     {
-        // Gravity accumulation, horizontal movement from input, and MoveAndSlide
-        // are all handled by MovementComponent, same as Walk/Run/Fall.
         drone.Movement.Update(delta);
     }
 }

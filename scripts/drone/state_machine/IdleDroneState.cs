@@ -8,27 +8,38 @@ public partial class IdleDroneState : DroneStateMachine
     {
         if (!drone.IsOnFloor())
         {
-            drone.stateManager.TransitionToState(new FallDroneState());
+            drone.stateManager.TransitionToState<FallDroneState>();
         }
     }
 
     public override void PreUpdate(Drone drone)
     {
+        base.PreUpdate(drone);
+
         if (!drone.IsOnFloor())
         {
-            drone.stateManager.TransitionToState(new FallDroneState());
+            drone.stateManager.TransitionToState<FallDroneState>();
             return;
         }
 
         if (WantsJump())
         {
-            drone.stateManager.TransitionToState(new JumpDroneState());
+            drone.stateManager.TransitionToState<JumpDroneState>();
+            return;
+        }
+
+        if (WantsCrouch())
+        {
+            drone.stateManager.TransitionToState<SneakDroneState>();
             return;
         }
 
         if (hasInputDirection(drone))
         {
-            drone.stateManager.TransitionToState(WantsRun(drone) ? new RunDroneState() : new WalkDroneState());
+            if (WantsRun(drone))
+                drone.stateManager.TransitionToState<RunDroneState>();
+            else
+                drone.stateManager.TransitionToState<WalkDroneState>();
             return;
         }
     }

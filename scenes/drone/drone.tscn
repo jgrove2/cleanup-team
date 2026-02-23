@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://d30cyqjhoyllj" path="res://scripts/drone/Drone.cs" id="1_ws74u"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_6e2c3"]
+radius = 0.4
 
 [node name="Drone" type="CharacterBody3D" unique_id=273523223]
 script = ExtResource("1_ws74u")
