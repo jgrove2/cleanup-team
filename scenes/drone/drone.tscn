@@ -6,6 +6,139 @@
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_6e2c3"]
 radius = 0.4
 
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_ws74u"]
+radius = 0.4
+
+[sub_resource type="SphereMesh" id="SphereMesh_ws74u"]
+radius = 0.1
+height = 0.1
+
+[sub_resource type="Animation" id="Animation_361hk"]
+length = 0.001
+tracks/0/type = "position_3d"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("../right_hand")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = PackedFloat32Array(0, 1, 0.25418073, 1.0116067, -0.63814545)
+
+[sub_resource type="Animation" id="Animation_xanut"]
+tracks/0/type = "position_3d"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("../right_hand")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = PackedFloat32Array(0, 1, 0.25418073, 1.0542098, -0.63814545, 1, 1, 0.25061226, 1.0034252, -0.6018677)
+tracks/1/type = "rotation_3d"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("../right_hand")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = PackedFloat32Array(0, 1, 0, 0, 0, 1, 1, 1, 0.079544954, 0.0049504773, 0.4401565, 0.8943772)
+
+[sub_resource type="Animation" id="Animation_315ty"]
+
+[sub_resource type="Animation" id="Animation_5e86u"]
+tracks/0/type = "position_3d"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("../right_hand")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = PackedFloat32Array(0, 1, 0.49352494, 1.3461759, -0.47393012, 1, 1, 0.011682719, 0.8606566, -0.58608663)
+tracks/1/type = "rotation_3d"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("../right_hand")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = PackedFloat32Array(0, 1, 0.3492069, 0.07109771, -0.1864061, 0.91556126, 1, 1, 0.3492069, 0.07109771, -0.18640614, 0.9155613)
+
+[sub_resource type="Animation" id="Animation_nfagk"]
+
+[sub_resource type="Animation" id="Animation_uli58"]
+resource_name = "one_hand_swing"
+tracks/0/type = "position_3d"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("../right_hand")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = PackedFloat32Array(0, 1, 0.25418073, 1.0116067, -0.63814545, 1, 1, 0.49352494, 1.3461759, -0.47393012)
+tracks/1/type = "rotation_3d"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("../right_hand")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = PackedFloat32Array(0, 1, 0, 0, 0, 1, 1, 1, 0.3492069, 0.071097724, -0.18640614, 0.91556126)
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_qtwm1"]
+_data = {
+&"RESET": SubResource("Animation_361hk"),
+&"block": SubResource("Animation_xanut"),
+&"swing_left": SubResource("Animation_315ty"),
+&"swing_right": SubResource("Animation_5e86u"),
+&"windup_left": SubResource("Animation_nfagk"),
+&"windup_right": SubResource("Animation_uli58")
+}
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_ws74u"]
+animation = &"windup_right"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_361hk"]
+animation = &"RESET"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_xanut"]
+animation = &"block"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_315ty"]
+animation = &"swing_right"
+
+[sub_resource type="AnimationNodeTransition" id="AnimationNodeTransition_5e86u"]
+input_0/name = "windup_right"
+input_0/auto_advance = false
+input_0/break_loop_at_end = false
+input_0/reset = true
+input_1/name = "swing_right"
+input_1/auto_advance = false
+input_1/break_loop_at_end = false
+input_1/reset = true
+input_2/name = "block"
+input_2/auto_advance = false
+input_2/break_loop_at_end = false
+input_2/reset = true
+input_3/name = "idle"
+input_3/auto_advance = false
+input_3/break_loop_at_end = false
+input_3/reset = true
+
+[sub_resource type="AnimationNodeTimeScale" id="AnimationNodeTimeScale_ws74u"]
+
+[sub_resource type="AnimationNodeTimeScale" id="AnimationNodeTimeScale_361hk"]
+
+[sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_nfagk"]
+graph_offset = Vector2(-1647, -195)
+nodes/output/position = Vector2(520, 140)
+nodes/Animation/node = SubResource("AnimationNodeAnimation_315ty")
+nodes/Animation/position = Vector2(-440, 200)
+"nodes/Animation 2/node" = SubResource("AnimationNodeAnimation_ws74u")
+"nodes/Animation 2/position" = Vector2(-440, 40)
+nodes/Transition/node = SubResource("AnimationNodeTransition_5e86u")
+nodes/Transition/position = Vector2(240, 160)
+"nodes/Animation 3/node" = SubResource("AnimationNodeAnimation_361hk")
+"nodes/Animation 3/position" = Vector2(-440, 560)
+"nodes/Animation 4/node" = SubResource("AnimationNodeAnimation_xanut")
+"nodes/Animation 4/position" = Vector2(-440, 380)
+nodes/windup_speed/node = SubResource("AnimationNodeTimeScale_361hk")
+nodes/windup_speed/position = Vector2(-60, -120)
+nodes/swing_speed/node = SubResource("AnimationNodeTimeScale_ws74u")
+nodes/swing_speed/position = Vector2(-80, 140)
+node_connections = [&"output", 0, &"Transition", &"Transition", 0, &"windup_speed", &"Transition", 1, &"swing_speed", &"Transition", 2, &"Animation 4", &"Transition", 3, &"Animation 3", &"windup_speed", 0, &"Animation 2", &"swing_speed", 0, &"Animation"]
+
 [node name="Drone" type="CharacterBody3D" unique_id=273523223]
 script = ExtResource("1_ws74u")
 
@@ -17,3 +150,31 @@ shape = SubResource("CapsuleShape3D_6e2c3")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.75, 0)
 
 [node name="IngameMenu" parent="Camera3D" unique_id=1066757987 instance=ExtResource("2_ws74u")]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=1241230758]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+mesh = SubResource("CapsuleMesh_ws74u")
+
+[node name="right_hand" type="MeshInstance3D" parent="." unique_id=1030538446]
+transform = Transform3D(0.92039585, 0.39098823, 2.980233e-08, -0.29167685, 0.6866149, -0.6659469, -0.26037726, 0.61293477, 0.7459995, 0.25418073, 1.0116067, -0.63814545)
+mesh = SubResource("SphereMesh_ws74u")
+
+[node name="right_weapon_pivot" type="Node3D" parent="right_hand" unique_id=1998219106]
+
+[node name="left_hand" type="MeshInstance3D" parent="." unique_id=485253934]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.24970716, 1.0500156, -0.63814545)
+mesh = SubResource("SphereMesh_ws74u")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1985775981]
+root_node = NodePath("../MeshInstance3D")
+libraries/ = SubResource("AnimationLibrary_qtwm1")
+
+[node name="AnimationTree" type="AnimationTree" parent="." unique_id=1028529950]
+root_node = NodePath("../MeshInstance3D")
+tree_root = SubResource("AnimationNodeBlendTree_nfagk")
+anim_player = NodePath("../AnimationPlayer")
+parameters/Transition/current_state = "windup_right"
+parameters/Transition/transition_request = ""
+parameters/Transition/current_index = 0
+parameters/windup_speed/scale = 1.0
+parameters/swing_speed/scale = 1.0

@@ -2,6 +2,7 @@
 
 [ext_resource type="PackedScene" uid="uid://ctx05nffktyxm" path="res://scenes/playgrounds/player_playground.tscn" id="1_o5qli"]
 [ext_resource type="PackedScene" uid="uid://dhcouddbwgg2e" path="res://scenes/drone/drone.tscn" id="2_0wfyh"]
+[ext_resource type="PackedScene" uid="uid://bb2p4mn0nnhux" path="res://scenes/enemy/melee/melee_enemy.tscn" id="3_sugp2"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_o5qli"]
 sky_top_color = Color(0.23905468, 0.4654696, 0.6731308, 1)
@@ -32,3 +33,6 @@ shadow_enabled = true
 [node name="Drone" parent="." unique_id=273523223 instance=ExtResource("2_0wfyh")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -22.68755, 5.648697, -44.019447)
 VaultSpeed = 1.0
+
+[node name="MeleeEnemy" parent="." unique_id=488186177 instance=ExtResource("3_sugp2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -55.427853, 2.019632, -57.875034)

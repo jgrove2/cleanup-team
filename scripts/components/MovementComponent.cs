@@ -32,12 +32,17 @@ public class MovementComponent
     }
 
     /// <summary>
-    /// Accumulates gravity, applies horizontal movement from input, then calls MoveAndSlide on the body.
-    /// Gravity is always applied so it is in effect across all states.
+    /// Accumulates gravity, applies horizontal movement from player input, then calls MoveAndSlide on the body.
     /// </summary>
-    public void Update(double delta)
+    public void Update(double delta) => Update(delta, ComputeInputDirection());
+
+    /// <summary>
+    /// Accumulates gravity, applies horizontal movement from the given direction, then calls MoveAndSlide on the body.
+    /// Pass <see cref="Vector3.Zero"/> to apply only gravity with no horizontal movement.
+    /// </summary>
+    public void Update(double delta, Vector3 direction)
     {
-        InputDirection = ComputeInputDirection();
+        InputDirection = direction;
 
         Vector3 velocity = body.Velocity;
 

@@ -5,4 +5,7 @@
     <EnableDynamicLoading>true</EnableDynamicLoading>
     <RootNamespace>CleanupCrew</RootNamespace>
   </PropertyGroup>
+  <ItemGroup>
+    <Folder Include="scripts\playable\drone\" />
+  </ItemGroup>
 </Project>
