@@ -6,6 +6,10 @@ public partial class IdleDroneState : DroneStateMachine
 {
     public override void Enter(Drone drone)
     {
+        SetMovement(drone, "idle");
+        SetAttackState(drone, "idle");
+        SetIsCrouching(drone, "no");
+
         if (!drone.IsOnFloor())
         {
             drone.stateManager.TransitionToState<FallDroneState>();

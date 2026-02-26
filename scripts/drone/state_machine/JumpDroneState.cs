@@ -4,6 +4,8 @@ public partial class JumpDroneState : DroneStateMachine
 {
     public override void Enter(Drone drone)
     {
+        SetMovement(drone, "idle");
+        SetAttackState(drone, "idle");
         Vector3 velocity = drone.Velocity;
         velocity.Y = drone.JumpVelocity;
         drone.Velocity = velocity;

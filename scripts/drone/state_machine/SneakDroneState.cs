@@ -2,9 +2,19 @@ using Godot;
 
 public partial class SneakDroneState : DroneStateMachine
 {
-    public override void Enter(Drone drone) => drone.Crouch();
+    public override void Enter(Drone drone)
+    {
+        drone.Crouch();
+        SetMovement(drone, "sneaking");
+        SetAttackState(drone, "sneaking");
+        SetSneakTimescale(drone, hasInputDirection(drone) ? 1.0f : 0.0f);
+    }
 
-    public override void Exit(Drone drone) => drone.Stand();
+    public override void Exit(Drone drone)
+    {
+        SetSneakTimescale(drone, 1.0f);
+        drone.Stand();
+    }
 
     public override void PreUpdate(Drone drone)
     {
@@ -36,6 +46,7 @@ public partial class SneakDroneState : DroneStateMachine
 
     public override void Update(Drone drone, double delta)
     {
+        SetSneakTimescale(drone, hasInputDirection(drone) ? 1.0f : 0.0f);
         drone.Movement.Update(delta);
     }
 }

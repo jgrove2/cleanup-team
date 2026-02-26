@@ -1,7 +1,7 @@
-  using Godot;
+using Godot;
 using System;
 
-public partial class Drone : CharacterBody3D
+public partial class Drone : CharacterBody3D, IDamageable
 {
 	[Export]
 	public float WalkSpeed { get; set; } = 3.0f;
@@ -20,9 +20,13 @@ public partial class Drone : CharacterBody3D
 	public bool IsWalkToggled { get; set; } = false;
 
 	public StateManager<Drone> stateManager;
+	public StateManager<Drone> attackStateManager;
 	public MovementComponent Movement { get; private set; }
 	public CameraComponent CameraControl { get; private set; }
 	public CollisionShape3D CollisionShape { get; private set; }
+	public HealthComponent Health { get; private set; }
+	public EquipmentComponent Equipment { get; private set; }
+	public AnimationTree AnimTree { get; private set; }
 
 	public Vector3 VaultTarget { get; set; }
 	public bool VaultShouldCrouch { get; set; }
@@ -36,8 +40,32 @@ public partial class Drone : CharacterBody3D
 		standingShapeHeight = originalCapsule.Height;
 		standingShapePositionY = CollisionShape.Position.Y;
 		standingShapeCache = new CapsuleShape3D { Height = standingShapeHeight, Radius = originalCapsule.Radius };
+		Health = new HealthComponent(100);
+		Equipment = new EquipmentComponent();
+		AnimTree = GetNode<AnimationTree>("AnimationTree");
 		stateManager = new StateManager<Drone>(this);
+		attackStateManager = new StateManager<Drone>(this);
+		// Defer activation to the next frame so the AnimationTree fully
+		// initialises its parameter table before the first state writes to it.
+		CallDeferred(MethodName.StartAnimationTree);
+	}
+
+	private void StartAnimationTree()
+	{
+		AnimTree.Active = true;
 		stateManager.TransitionToState<IdleDroneState>();
+		attackStateManager.TransitionToState<IdleAttackDroneState>();
+	}
+
+	public void ReceiveDamage(DamageEffect effect, float multiplier)
+	{
+		if (!Health.IsAlive()) return;
+
+		int raw = (int)Math.Round(effect.DamageAmount * multiplier);
+		int armor = effect.DamageType == DamageType.Physical
+			? Equipment.GetTotalProtection(ProtectionType.Physical)
+			: 0;
+		Health.TakeDamage(Math.Max(0, raw - armor));
 	}
 
 	public override void _UnhandledInput(InputEvent @event)
@@ -51,6 +79,7 @@ public partial class Drone : CharacterBody3D
 			IsWalkToggled = !IsWalkToggled;
 
 		stateManager.Update(delta);
+		attackStateManager.Update(delta);
 	}
 
 	public void Crouch()

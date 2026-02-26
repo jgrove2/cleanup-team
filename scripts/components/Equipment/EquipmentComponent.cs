@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using Godot;
 
 public enum HandRequirement
 {
@@ -15,16 +17,31 @@ public class EquipmentComponent
 
     private readonly Dictionary<EquipmentSlot, Wearable> _armorSlots;
     private readonly Dictionary<EquipmentSlot, BaseItem> _handSlots;
+    private readonly Dictionary<EquipmentSlot, Node3D> _spawnPoints;
     private Wearable _bagSlot;
 
     public IReadOnlyDictionary<EquipmentSlot, Wearable> EquippedArmor => _armorSlots;
     public IReadOnlyDictionary<EquipmentSlot, BaseItem> EquippedInHands => _handSlots;
     public Wearable EquippedBag => _bagSlot;
 
+    /// <summary>Fired after an item is successfully placed into a slot.</summary>
+    public event Action<EquipmentSlot, BaseItem> OnItemEquipped;
+    /// <summary>Fired after an item is removed from a slot.</summary>
+    public event Action<EquipmentSlot> OnItemUnequipped;
+
     public EquipmentComponent()
     {
         _armorSlots = new Dictionary<EquipmentSlot, Wearable>();
         _handSlots = new Dictionary<EquipmentSlot, BaseItem>();
+        _spawnPoints = new Dictionary<EquipmentSlot, Node3D>();
+    }
+
+    public void RegisterSpawnPoint(EquipmentSlot slot, Node3D node) => _spawnPoints[slot] = node;
+
+    public Node3D GetSpawnPoint(EquipmentSlot slot)
+    {
+        _spawnPoints.TryGetValue(slot, out var node);
+        return node;
     }
 
     public bool EquipArmor(Wearable item)
@@ -32,6 +49,7 @@ public class EquipmentComponent
         if (!ArmorSlots.Contains(item.Slot)) return false;
         if (_armorSlots.ContainsKey(item.Slot)) return false;
         _armorSlots[item.Slot] = item;
+        OnItemEquipped?.Invoke(item.Slot, item);
         return true;
     }
 
@@ -52,6 +70,7 @@ public class EquipmentComponent
     {
         if (_handSlots.ContainsKey(slot)) return false;
         _handSlots[slot] = item;
+        OnItemEquipped?.Invoke(slot, item);
         return true;
     }
 
@@ -60,6 +79,9 @@ public class EquipmentComponent
         if (_handSlots.ContainsKey(EquipmentSlot.LeftHand) || _handSlots.ContainsKey(EquipmentSlot.RightHand)) return false;
         _handSlots[EquipmentSlot.LeftHand] = item;
         _handSlots[EquipmentSlot.RightHand] = item;
+        // Fire RightHand first so the visual component can treat it as the primary anchor.
+        OnItemEquipped?.Invoke(EquipmentSlot.RightHand, item);
+        OnItemEquipped?.Invoke(EquipmentSlot.LeftHand, item);
         return true;
     }
 
@@ -67,6 +89,7 @@ public class EquipmentComponent
     {
         if (!_armorSlots.TryGetValue(slot, out var item)) return null;
         _armorSlots.Remove(slot);
+        OnItemUnequipped?.Invoke(slot);
         return item;
     }
 
@@ -74,11 +97,15 @@ public class EquipmentComponent
     {
         if (!_handSlots.TryGetValue(slot, out var item)) return null;
         _handSlots.Remove(slot);
+        OnItemUnequipped?.Invoke(slot);
 
         // Two-handed items share the same reference in both slots — clear the other slot too
         var otherSlot = slot == EquipmentSlot.LeftHand ? EquipmentSlot.RightHand : EquipmentSlot.LeftHand;
         if (_handSlots.TryGetValue(otherSlot, out var otherItem) && ReferenceEquals(item, otherItem))
+        {
             _handSlots.Remove(otherSlot);
+            OnItemUnequipped?.Invoke(otherSlot);
+        }
 
         return item;
     }
@@ -108,6 +135,7 @@ public class EquipmentComponent
     {
         if (_bagSlot != null) return false;
         _bagSlot = bag;
+        OnItemEquipped?.Invoke(EquipmentSlot.Bag, bag);
         return true;
     }
 
@@ -115,6 +143,7 @@ public class EquipmentComponent
     {
         var bag = _bagSlot;
         _bagSlot = null;
+        if (bag != null) OnItemUnequipped?.Invoke(EquipmentSlot.Bag);
         return bag;
     }
 

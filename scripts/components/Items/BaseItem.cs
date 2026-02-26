@@ -1,4 +1,5 @@
 using System;
+using Godot;
 
 public enum ItemRarity
 {
@@ -35,6 +36,7 @@ public abstract class BaseItem
     public ItemCategory Category { get; set; }
     public StatusEffect StatusEffect { get; set; }
     public ItemSize Size { get; protected set; }
+    public PackedScene SceneTemplate { get; protected set; }
     public BaseItem(string name, string description, ItemRarity rarity, ItemCategory category, StatusEffect statusEffect, ItemSize size = default)
     {
         Id = Guid.NewGuid();

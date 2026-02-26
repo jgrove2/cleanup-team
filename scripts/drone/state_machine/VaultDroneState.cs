@@ -7,6 +7,8 @@ public partial class VaultDroneState : DroneStateMachine
     public override void Enter(Drone drone)
     {
         drone.Velocity = Vector3.Zero;
+        SetMovement(drone, "idle");
+        SetAttackState(drone, "idle");
 
         if (drone.VaultShouldCrouch)
         {

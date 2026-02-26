@@ -5,6 +5,8 @@ public partial class FallDroneState : DroneStateMachine
 {
 	public override void Enter(Drone drone)
 	{
+		SetMovement(drone, "idle");
+		SetAttackState(drone, "idle");
 		GD.Print("Drone has entered the fall state.");
 	}
     public override void PreUpdate(Drone drone)

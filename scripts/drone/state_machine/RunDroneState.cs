@@ -11,6 +11,8 @@ public partial class RunDroneState : DroneStateMachine
         }
 
         drone.Movement.Speed = drone.RunSpeed;
+        SetMovement(drone, "run");
+        SetAttackState(drone, "run");
     }
 
     public override void PreUpdate(Drone drone)

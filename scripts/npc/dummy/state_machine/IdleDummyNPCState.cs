@@ -1,6 +1,11 @@
+using Godot;
+
 public class IdleDummyNPCState : DummyNPCStateMachine
 {
-    public override void Enter(DummyNPC npc) { }
+    public override void Enter(DummyNPC npc)
+    {
+        npc.AnimTree.Set("parameters/Transition/transition_request", "idle");
+    }
 
     public override void PreUpdate(DummyNPC npc)
     {
